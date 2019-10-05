@@ -1,5 +1,7 @@
 package com.example.abhishek.blood;
 
+import android.app.AlertDialog;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
-    private ArrayList<String> dataSet;
+    private ArrayList<User> dataSet;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +41,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         }
     }
 
-    public CustomAdapter(ArrayList<String> data) {
+    public CustomAdapter(ArrayList<User> data) {
         this.dataSet = data;
     }
 
@@ -61,12 +63,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         TextView textViewMobile = holder.textViewMobile;
         TextView textViewGender = holder.textViewGender;
         TextView textViewCity = holder.textViewCity;
+        ViewListContents viewListContents = new ViewListContents();
+        if(dataSet.size() == 0){
+            viewListContents.showDialog();
+        }
+        else{
+            textViewName.setText("Name: "+dataSet.get(listPosition).Name);
+            textViewCity.setText("City: "+dataSet.get(listPosition).City);
+            textViewGender.setText("Gender: "+dataSet.get(listPosition).Gender);
+            textViewBlood.setText("Blood Grp: "+dataSet.get(listPosition).BloodGrp);
+            textViewMobile.setText("Mobile: "+dataSet.get(listPosition).Mobile);
+        }
 
-        textViewName.setText(dataSet.get(listPosition));
-        textViewCity.setText(dataSet.get(listPosition+1));
-        textViewGender.setText(dataSet.get(listPosition+4));
-        textViewBlood.setText(dataSet.get(listPosition+2));
-        textViewMobile.setText(dataSet.get(listPosition+3));
 
     }
 
@@ -74,6 +82,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public int getItemCount() {
         return dataSet.size();
     }
+
+
 }
 
 

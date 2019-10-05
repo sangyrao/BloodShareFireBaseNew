@@ -13,4 +13,6 @@
     <string name="mail_feedback_subject">Feedback on your app</string>
     <string name="mail_feedback_message">Hi,
 \n\nYour app rocks! I would like to give you some feedback:</string>
+    <string name="title_activity_hello">Hello</string>
+    <string name="title_activity_home">Home</string>
 </resources>

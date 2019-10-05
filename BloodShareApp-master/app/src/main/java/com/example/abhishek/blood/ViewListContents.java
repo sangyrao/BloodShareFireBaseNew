@@ -1,5 +1,6 @@
 package com.example.abhishek.blood;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -34,7 +35,7 @@ public class ViewListContents extends AppCompatActivity {
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
      RecyclerView recyclerView;
-    private static ArrayList<String> data;
+    private static ArrayList<User> data;
 
 
     @Override
@@ -49,7 +50,7 @@ public class ViewListContents extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        data = new ArrayList<String>();
+        data = new ArrayList<User>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mUserList = (ListView)findViewById(R.id.listView);
@@ -72,11 +73,9 @@ public class ViewListContents extends AppCompatActivity {
                             mUserNames.add("==============================");
 
                             arrayAdapter.notifyDataSetChanged();*/
-                            try{data.add("Name: " +u.Name);
-                                data.add("City: " + u.City);
-                                data.add("BloodGroup: " + u.BloodGrp);
-                                data.add("Mobile: " + u.Mobile);
-                                data.add("Gender: " + u.Gender);
+                            try{
+                                data.add(u);
+
                             }
                             catch(Exception e){
                                 e.printStackTrace();
@@ -109,6 +108,13 @@ public class ViewListContents extends AppCompatActivity {
         });
 
 
+    }
+   public void  showDialog(){
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this,0);
+        AlertDialog dialog = mBuilder.create();
+       dialog.setTitle("Alert");
+       dialog.setMessage("No Donors Found");
+        dialog.show();
     }
 }
 

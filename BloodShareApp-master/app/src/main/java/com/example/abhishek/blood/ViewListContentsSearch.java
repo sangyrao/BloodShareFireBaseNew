@@ -2,6 +2,9 @@ package com.example.abhishek.blood;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -24,12 +27,15 @@ public class ViewListContentsSearch extends AppCompatActivity {
     private List<String> mUserNames = new ArrayList<>();
     String city;
     String blood;
+    private static ArrayList<User> data;
+    RecyclerView recyclerView;
+    RecyclerView.Adapter adapter;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.viewsearchlist);
-        String arr[] = {"A","B","C","D","E"};
+        setContentView(R.layout.card);
         try{
             Bundle bundle = getIntent().getExtras();
             city = bundle.getString("city");
@@ -38,28 +44,35 @@ public class ViewListContentsSearch extends AppCompatActivity {
         catch(Exception e){
             e.printStackTrace();
         }
+        data = new ArrayList<User>();
+        recyclerView = findViewById(R.id.recyclerView);
 
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mUserList = (ListView)findViewById(R.id.display);
+        /*mUserList = (ListView)findViewById(R.id.display);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mUserNames);
-        mUserList.setAdapter(arrayAdapter);
+        mUserList.setAdapter(arrayAdapter);*/
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //String value = dataSnapshot.getValue(String.class);
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
                     User u = ds.getValue(User.class);
-                    if(u.City.equals(city) && u.BloodGrp.equals(blood)){
-                        mUserNames.add("Name: " + u.Name);
-                        mUserNames.add("City: " + u.City);
-                        mUserNames.add("BloodGroup: " + u.BloodGrp);
-                        mUserNames.add("Mobile: " + u.Mobile);
-                        mUserNames.add("Gender: " + u.Gender);
-                        mUserNames.add("==============================");
-                        arrayAdapter.notifyDataSetChanged();
+                    if(u.City.equalsIgnoreCase(city) && u.BloodGrp.equalsIgnoreCase(blood)){
+                        try{data.add(u);
+
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
                     }
 
                 }
+                adapter = new CustomAdapter(data);
+                recyclerView.setAdapter(adapter);
+
             }
 
             @Override
